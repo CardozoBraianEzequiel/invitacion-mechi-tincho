@@ -58,3 +58,29 @@ La forma más rápida de publicar la web es usando Netlify conectado a tu GitHub
 
 ### 🔄 Actualizaciones automáticas
 Cada vez que hagas un cambio en tu código y hagas un `git push` a GitHub, Netlify va a detectar el cambio y actualizará la web publicada automáticamente en un par de minutos.
+
+## 💻 Opción B: Deploy manual desde consola (Netlify CLI)
+
+Si preferís hacerlo todo desde la terminal sin conectar GitHub:
+
+1.  **Instalar Netlify CLI**:
+    ```bash
+    npm install netlify-cli -g
+    ```
+
+2.  **Loguearse**:
+    ```bash
+    netlify login
+    ```
+
+3.  **Construir el proyecto**:
+    ```bash
+    npm run build
+    ```
+
+4.  **Deployar**:
+    ```bash
+    netlify deploy --prod --dir=dist
+    ```
+    *   Te va a preguntar si querés crear un nuevo sitio (poné que sí).
+    *   Listo, te devolverá la URL publicada.
