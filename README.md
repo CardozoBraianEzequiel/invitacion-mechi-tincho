@@ -1,73 +1,60 @@
-# React + TypeScript + Vite
+# Invitación de Boda - Martín & Mercedes
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Web de invitación interactiva (SPA) construida con React, Vite y Tailwind CSS.
 
-Currently, two official plugins are available:
+## 🚀 Cómo levantar el proyecto localmente
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Si querés probar o editar la web en tu computadora:
 
-## React Compiler
+1.  **Clonar el repositorio** (si no lo tenés):
+    ```bash
+    git clone https://github.com/CardozoBraianEzequiel/invitacion-mechi-tincho.git
+    cd invitacion-mechi-tincho
+    ```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+2.  **Instalar dependencias**:
+    ```bash
+    npm install
+    ```
 
-## Expanding the ESLint configuration
+3.  **Iniciar el servidor de desarrollo**:
+    ```bash
+    npm run dev
+    ```
+    > Esto abrirá la web en `http://localhost:5173` (o similar).
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## ⚙️ Configuración y Edición
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Toda la información del evento (nombres, fechas, lugares, links) está centralizada en un solo archivo para que sea fácil de editar:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+*   📂 **Archivo**: `src/config/siteConfig.ts`
+*   Cambiar textos, links de mapas, CBU, alias, etc. desde ahí.
+*   Las imágenes se configuran también ahí (logos y fotos de fondo).
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🌐 Cómo desplegar en Netlify (Gratis)
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+La forma más rápida de publicar la web es usando Netlify conectado a tu GitHub.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1.  **Ingresar a Netlify**:
+    *   Andá a [netlify.com](https://www.netlify.com) y logueate (preferiblemente con tu cuenta de GitHub).
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+2.  **Crear nuevo sitio**:
+    *   En el dashboard, clickeá en **"Add new site"** -> **"Import from an existing project"**.
+
+3.  **Conectar con GitHub**:
+    *   Seleccioná **GitHub** como proveedor.
+    *   Autorizá a Netlify si te lo pide.
+    *   Buscá y seleccioná el repositorio: `invitacion-mechi-tincho`.
+
+4.  **Configurar el Build (Automático)**:
+    *   Netlify suele detectar todo solo, pero verificá que diga:
+        *   **Build command**: `npm run build`
+        *   **Publish directory**: `dist`
+    *   Clickeá en **"Deploy site"**.
+
+5.  **¡Listo!**:
+    *   Netlify va a construir la página y en unos segundos te dará una URL (ej: `calm-wisp-123456.netlify.app`).
+    *   Podés cambiar ese nombre en **Site configuration** > **Change site name**.
+
+### 🔄 Actualizaciones automáticas
+Cada vez que hagas un cambio en tu código y hagas un `git push` a GitHub, Netlify va a detectar el cambio y actualizará la web publicada automáticamente en un par de minutos.
