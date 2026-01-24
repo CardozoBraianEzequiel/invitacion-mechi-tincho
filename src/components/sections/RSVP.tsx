@@ -2,24 +2,83 @@ import { useState } from "react";
 import { siteConfig } from "../../config/siteConfig";
 import { Section } from "../ui/Section";
 import { Button } from "../ui/Button";
+import invitadosData from "../../data/invitados.json";
+
+interface Invitado {
+    id: number;
+    nombre_completo: string;
+}
 
 export const RSVP = () => {
     const [formData, setFormData] = useState({
         name: "",
         attendance: "si",
-        restrictions: "",
-        message: ""
+        restrictions: "Sin restriccion"
     });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const [suggestions, setSuggestions] = useState<Invitado[]>([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        alert(`Formulario enviado (simulado) para: ${formData.name}`);
-        // In real app, submit to API or redirect to WhatsApp
-        // window.location.href = siteConfig.rsvp.formUrl; 
+        setIsSubmitting(true);
+
+        if (!siteConfig.rsvp.sheetUrl) {
+            alert("Error de configuración: URL de Google Sheets no definida.");
+            setIsSubmitting(false);
+            return;
+        }
+
+        try {
+            // Usamos GET con parámetros en la URL (más confiable para Google Apps Script)
+            const params = new URLSearchParams({
+                name: formData.name,
+                attendance: formData.attendance,
+                restrictions: formData.restrictions
+            });
+
+            const url = `${siteConfig.rsvp.sheetUrl}?${params.toString()}`;
+
+            await fetch(url, {
+                method: "GET",
+                mode: "no-cors"
+            });
+
+            setIsSuccess(true);
+            setFormData({ name: "", attendance: "si", restrictions: "Sin restriccion" });
+        } catch (error) {
+            console.error("Error al enviar formulario", error);
+            alert("Hubo un error al enviar tu confirmación. Por favor intentá nuevamente.");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+
+        if (name === "name") {
+            if (value.length > 0) {
+                const matches = invitadosData.filter(invitado =>
+                    invitado.nombre_completo.toLowerCase().includes(value.toLowerCase())
+                );
+                setSuggestions(matches);
+                setShowSuggestions(true);
+            } else {
+                setSuggestions([]);
+                setShowSuggestions(false);
+            }
+        }
+    };
+
+    const handleSelectInvitado = (nombre: string) => {
+        setFormData(prev => ({ ...prev, name: nombre }));
+        setSuggestions([]);
+        setShowSuggestions(false);
     };
 
     return (
@@ -31,7 +90,12 @@ export const RSVP = () => {
 
             <div className="max-w-xl mx-auto bg-white p-8 md:p-10 rounded-2xl shadow-lg border border-stone-100">
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    <div>
+                    {isSuccess && (
+                        <div className="bg-green-50 border border-green-200 text-green-800 p-4 rounded-lg text-center font-medium">
+                            ¡Gracias! Tu confirmación ha sido enviada.
+                        </div>
+                    )}
+                    <div className="relative">
                         <label className="block text-sm font-medium text-stone-600 mb-1">Nombre y Apellido</label>
                         <input
                             type="text"
@@ -39,9 +103,26 @@ export const RSVP = () => {
                             required
                             value={formData.name}
                             onChange={handleChange}
+                            onFocus={() => {
+                                if (formData.name) handleChange({ target: { name: 'name', value: formData.name } } as any);
+                            }}
+                            autoComplete="off"
                             className="w-full px-4 py-3 rounded-lg border border-stone-200 focus:ring-2 focus:ring-wedding-sage focus:border-transparent outline-none transition-all bg-stone-50"
                             placeholder="Ej: Juan Pérez"
                         />
+                        {showSuggestions && suggestions.length > 0 && (
+                            <ul className="absolute z-20 w-full bg-white mt-1 border border-stone-100 rounded-lg shadow-xl max-h-60 overflow-y-auto overflow-x-hidden">
+                                {suggestions.map((invitado) => (
+                                    <li
+                                        key={invitado.id}
+                                        onClick={() => handleSelectInvitado(invitado.nombre_completo)}
+                                        className="px-4 py-3 hover:bg-wedding-sage/10 cursor-pointer text-stone-700 transition-colors border-b border-stone-50 last:border-0"
+                                    >
+                                        {invitado.nombre_completo}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
                     </div>
 
                     <div className="grid grid-cols-1 gap-4">
@@ -61,30 +142,25 @@ export const RSVP = () => {
 
                     <div>
                         <label className="block text-sm font-medium text-stone-600 mb-1">Restricciones Alimentarias</label>
-                        <input
-                            type="text"
+                        <select
                             name="restrictions"
                             value={formData.restrictions}
                             onChange={handleChange}
                             className="w-full px-4 py-3 rounded-lg border border-stone-200 focus:ring-2 focus:ring-wedding-sage outline-none bg-stone-50"
-                            placeholder="Ej: Vegetariano, Celiaquía, etc."
-                        />
+                        >
+                            <option value="Sin restriccion">Sin restriccion</option>
+                            <option value="Vegetariana">Vegetariana</option>
+                            <option value="Vegana">Vegana</option>
+                            <option value="Celiaca">Celiaca</option>
+                        </select>
                     </div>
 
-                    <div>
-                        <label className="block text-sm font-medium text-stone-600 mb-1">Mensaje para los novios</label>
-                        <textarea
-                            name="message"
-                            rows={3}
-                            value={formData.message}
-                            onChange={handleChange}
-                            className="w-full px-4 py-3 rounded-lg border border-stone-200 focus:ring-2 focus:ring-wedding-sage outline-none bg-stone-50"
-                            placeholder="¡Dejá tu saludo!"
-                        />
-                    </div>
-
-                    <Button type="submit" className="w-full pt-3 pb-3 text-lg shadow-lg">
-                        Enviar Confirmación
+                    <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className={`w-full pt-3 pb-3 text-lg shadow-lg ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
+                    >
+                        {isSubmitting ? 'Enviando...' : 'Enviar Confirmación'}
                     </Button>
                 </form>
             </div>

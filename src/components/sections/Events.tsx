@@ -51,7 +51,7 @@ const EventCard = ({
 
 export const Events = () => {
     return (
-        <Section id="events" alternate>
+        <Section id="events">
             <div className="text-center mb-12">
                 <h2 className="font-serif text-4xl text-wedding-text mb-4">Información del Evento</h2>
                 <p className="text-wedding-text/70 max-w-xl mx-auto">

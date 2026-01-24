@@ -72,15 +72,6 @@ export const Hero = () => {
                     </Button>
                 </motion.div>
             </div>
-
-            {/* Scroll Indicator */}
-            <motion.div
-                animate={{ y: [0, 10, 0] }}
-                transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-                className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/80"
-            >
-                <span className="text-xs uppercase tracking-widest">Scroll</span>
-            </motion.div>
         </section>
     );
 };
