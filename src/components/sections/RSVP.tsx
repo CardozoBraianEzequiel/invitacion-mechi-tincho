@@ -82,7 +82,7 @@ export const RSVP = () => {
     };
 
     return (
-        <Section id="rsvp" className="bg-wedding-sage/5">
+        <Section id="rsvp" alternate>
             <div className="text-center mb-10">
                 <h2 className="font-serif text-3xl text-wedding-sage mb-2">{siteConfig.rsvp.title}</h2>
                 <p className="text-wedding-text/70">{siteConfig.rsvp.description}</p>

@@ -1,7 +1,7 @@
 import logoImg from '../assets/logo1_ok.png';
 import footerLogoImg from '../assets/logo2_ok.png';
-import martinChildImg from '../assets/martin_nene.png';
-import mechiChildImg from '../assets/mechi_nena.png';
+import martinChildImg from '../assets/martin_nene.jpg';
+import mechiChildImg from '../assets/mechi_nena.jpg';
 import ceremonyImg from '../assets/san_jose.jpg';
 import partyImg from '../assets/salon.jpg';
 import heroImg from '../assets/portada.jpg';
@@ -34,10 +34,9 @@ export const siteConfig = {
         mapLink: "https://maps.app.goo.gl/5mhapjQwCWjYp9seA",
     },
     itinerary: [
-        { time: "20:30", title: "Ceremonia Religiosa", icon: "church" },
-        { time: "19:30", title: "Recepción", icon: "champagne" },
-        { time: "21:00", title: "Cena", icon: "dinner" },
-        { time: "21:30", title: "Fiesta", icon: "party" },
+        { time: "20:00", title: "Ceremonia Religiosa", icon: "church" },
+        { time: "21:30", title: "Recepción", icon: "champagne" },
+        { time: "22:30", title: "¡Comienza la fiesta!", icon: "party" },
     ],
     dressCode: {
         title: "Código de Vestimenta",

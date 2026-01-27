@@ -16,7 +16,7 @@ const getIcon = (iconName: string) => {
 
 export const Itinerary = () => {
     return (
-        <Section id="itinerary">
+        <Section id="itinerary" alternate>
             <div className="text-center mb-10">
                 <h2 className="font-serif text-3xl text-wedding-sage">Itinerario</h2>
             </div>

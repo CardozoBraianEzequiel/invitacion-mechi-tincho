@@ -17,7 +17,7 @@ export const Countdown = () => {
     const timeLeft = useCountdown(siteConfig.couple.timestamp);
 
     return (
-        <Section id="countdown" className="text-center">
+        <Section id="countdown" className="text-center" alternate>
             <h2 className="text-3xl md:text-4xl font-serif text-wedding-sage mb-2">
                 Falta muy poquito
             </h2>

@@ -4,9 +4,9 @@ import { Hero } from "./components/sections/Hero";
 import { Countdown } from "./components/sections/Countdown";
 import { CouplePhoto } from "./components/sections/CouplePhoto";
 import { Events } from "./components/sections/Events";
+import { Story } from "./components/sections/Story";
 import { TriviaGame } from "./components/sections/TriviaGame";
 import { Itinerary } from "./components/sections/Itinerary";
-import { Map } from "./components/sections/Map";
 import { DressCode } from "./components/sections/DressCode";
 import { Gifts } from "./components/sections/Gifts";
 import { Playlist } from "./components/sections/Playlist";
@@ -25,13 +25,13 @@ function App() {
         <Countdown />
         <CouplePhoto />
         <Events />
-        <TriviaGame />
         <Itinerary />
+        <Story />
         <DressCode />
-        <Map />
         <Gifts />
         <Playlist />
         <RSVP />
+        <TriviaGame />
         <PhotoGallery />
         <Footer />
       </main>

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 export const CouplePhoto = () => {
     return (
-        <Section id="couple-photo" className="text-center pt-0 md:pt-0" alternate>
+        <Section id="couple-photo" className="text-center pt-0 md:pt-0">
             <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}

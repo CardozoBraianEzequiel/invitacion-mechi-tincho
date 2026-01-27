@@ -66,7 +66,7 @@ export const TriviaGame = () => {
     const options: Answer[] = ["Martin", "Mechi", "Los dos", "Ninguno de los dos"];
 
     return (
-        <Section id="trivia" className="text-center" alternate>
+        <Section id="trivia" className="text-center">
             <div className="max-w-2xl mx-auto min-h-[400px] flex flex-col justify-center">
                 <AnimatePresence mode="wait">
                     {gameState === "intro" && (

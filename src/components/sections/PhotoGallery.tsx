@@ -56,7 +56,7 @@ export const PhotoGallery = () => {
     };
 
     return (
-        <Section id="fotos" className="bg-white">
+        <Section id="fotos" alternate>
             <div className="text-center mb-10">
                 <h2 className="font-serif text-3xl text-wedding-sage mb-2">Galería de fotos</h2>
                 <p className="text-wedding-text/70">Momentos que atesoramos juntos</p>
