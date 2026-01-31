@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { siteConfig } from "../../config/siteConfig";
 import { Section } from "../ui/Section";
 import { Button } from "../ui/Button";
+import { CheckCircle } from "lucide-react";
 import invitadosData from "../../data/invitados.json";
 
 interface Invitado {
@@ -18,9 +19,34 @@ export const RSVP = () => {
 
     const [suggestions, setSuggestions] = useState<Invitado[]>([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
+    const [confirmedGuests, setConfirmedGuests] = useState<string[]>([]);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
+
+    // Cargar invitados ya confirmados al iniciar
+    useEffect(() => {
+        const fetchConfirmed = async () => {
+            if (!siteConfig.rsvp.sheetUrl) return;
+            try {
+                // Forzamos que sea un llamado limpio sin parámetros
+                const response = await fetch(siteConfig.rsvp.sheetUrl, { cache: 'no-store' });
+                const text = await response.text();
+
+                try {
+                    const data = JSON.parse(text);
+                    if (Array.isArray(data)) {
+                        setConfirmedGuests(data);
+                    }
+                } catch (e) {
+                    // Fail silently
+                }
+            } catch (error) {
+                // Fail silently
+            }
+        };
+        fetchConfirmed();
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -48,9 +74,10 @@ export const RSVP = () => {
             });
 
             setIsSuccess(true);
+            // Agregamos el nombre localmente para feedback inmediato
+            setConfirmedGuests(prev => [...prev, formData.name]);
             setFormData({ name: "", attendance: "si", restrictions: "Sin restriccion" });
         } catch (error) {
-            console.error("Error al enviar formulario", error);
             alert("Hubo un error al enviar tu confirmación. Por favor intentá nuevamente.");
         } finally {
             setIsSubmitting(false);
@@ -108,19 +135,29 @@ export const RSVP = () => {
                             }}
                             autoComplete="off"
                             className="w-full px-4 py-3 rounded-lg border border-stone-200 focus:ring-2 focus:ring-wedding-sage focus:border-transparent outline-none transition-all bg-stone-50"
-                            placeholder="Ej: Juan Pérez"
+                            placeholder="Busca tu nombre..."
                         />
                         {showSuggestions && suggestions.length > 0 && (
                             <ul className="absolute z-20 w-full bg-white mt-1 border border-stone-100 rounded-lg shadow-xl max-h-60 overflow-y-auto overflow-x-hidden">
-                                {suggestions.map((invitado) => (
-                                    <li
-                                        key={invitado.id}
-                                        onClick={() => handleSelectInvitado(invitado.nombre_completo)}
-                                        className="px-4 py-3 hover:bg-wedding-sage/10 cursor-pointer text-stone-700 transition-colors border-b border-stone-50 last:border-0"
-                                    >
-                                        {invitado.nombre_completo}
-                                    </li>
-                                ))}
+                                {suggestions.map((invitado) => {
+                                    const isAlreadyConfirmed = confirmedGuests.includes(invitado.nombre_completo);
+                                    return (
+                                        <li
+                                            key={invitado.id}
+                                            onClick={() => handleSelectInvitado(invitado.nombre_completo)}
+                                            className={`px-4 py-3 hover:bg-wedding-sage/10 cursor-pointer transition-colors border-b border-stone-50 last:border-0 flex items-center justify-between ${isAlreadyConfirmed ? "text-stone-400" : "text-stone-700"
+                                                }`}
+                                        >
+                                            <span>{invitado.nombre_completo}</span>
+                                            {isAlreadyConfirmed && (
+                                                <span className="flex items-center gap-1 text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">
+                                                    <CheckCircle className="w-3 h-3" />
+                                                    Confirmado
+                                                </span>
+                                            )}
+                                        </li>
+                                    );
+                                })}
                             </ul>
                         )}
                     </div>

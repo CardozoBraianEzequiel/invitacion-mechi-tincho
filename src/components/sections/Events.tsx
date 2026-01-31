@@ -55,7 +55,7 @@ export const Events = () => {
             <div className="text-center mb-12">
                 <h2 className="font-serif text-4xl text-wedding-text mb-4">Información del Evento</h2>
                 <p className="text-wedding-text/70 max-w-xl mx-auto">
-                    Los esperamos para compartir este momento único con nosotros.
+                    Los esperamos el 16 de Mayo para compartir este momento único con nosotros.
                 </p>
             </div>
 

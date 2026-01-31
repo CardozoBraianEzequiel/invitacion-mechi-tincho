@@ -11,7 +11,7 @@ export const siteConfig = {
         names: "Mercedes & Martín",
         shortNames: ["Mercedes", "Martín"],
         date: "16 de Mayo de 2026",
-        timestamp: "2026-05-16T18:00:00", // ISO format for countdown
+        timestamp: "2026-05-16T20:00:00", // ISO format for countdown
     },
     hero: {
         title: "Mercedes & Martín",
@@ -21,7 +21,7 @@ export const siteConfig = {
     },
     ceremony: {
         title: "Ceremonia",
-        time: "18:00 hs", // Placeholder
+        time: "20:00 hs", // Placeholder
         placeName: "Parroquia San Jose", // User asked to keep same as ref but use placeholder if unknown
         address: "Cnel. Brandsen 4962, B1874ACN Villa Dominico, Provincia de Buenos Aires",
         mapLink: "https://maps.app.goo.gl/L9esHgs6z9g9c78B8",
@@ -67,7 +67,7 @@ export const siteConfig = {
         title: "Confirmación de Asistencia",
         description: "Por favor confirmá tu asistencia antes del 1 de Abril.",
         formUrl: "#", // Link to Google Form or similar
-        sheetUrl: "https://script.google.com/macros/s/AKfycbxhudG_kbD_LbxatYfBS7eJFbMOChZV_CoEl4bB54gQmoYlfyywy34vEEOkyl9W7-Wvxg/exec", // URL of the Google Apps Script Web App
+        sheetUrl: "https://script.google.com/macros/s/AKfycbwWFOKHYGx3tfoOfEhgznxcn02gfXRZPpGksHHikXjQde9_7ovwxhB-3oKzV20XmM_xcg/exec",
         whatsappPhone: "5491100000000",
     },
     images: {
