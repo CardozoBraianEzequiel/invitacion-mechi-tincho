@@ -60,7 +60,7 @@ export const siteConfig = {
     playlist: {
         title: "Música",
         description: "¡Ayudanos a armar la playlist! Sumá las canciones que no pueden faltar.",
-        spotifyLink: "#",
+        spotifyLink: "https://open.spotify.com/playlist/5qKhlkSphYLGit5TCV6JU3?si=MV1z_mrcQAiEm855nZcY7w&pi=mRUMYwxpRgOCm&pt=3c6170cb2273129fb557980e6aeee3ce",
         buttonText: "Sumar canciones",
     },
     rsvp: {
