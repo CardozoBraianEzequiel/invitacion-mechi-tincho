@@ -21,6 +21,8 @@ export const RSVP = () => {
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [confirmedGuests, setConfirmedGuests] = useState<string[]>([]);
 
+    const [nameError, setNameError] = useState<string | null>(null);
+
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
 
@@ -48,8 +50,42 @@ export const RSVP = () => {
         fetchConfirmed();
     }, []);
 
+    const formatName = (name: string) => {
+        return name
+            .trim()
+            .split(/\s+/)
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+            .join(' ');
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setNameError(null);
+
+        const inputName = formData.name.trim();
+        let finalName = inputName;
+
+        // 1. Intentar encontrar coincidencia exacta (ignore case) en la lista oficial
+        const guest = invitadosData.find(
+            inv => inv.nombre_completo.toLowerCase() === inputName.toLowerCase()
+        );
+
+        if (guest) {
+            // Si está en la lista, usamos el nombre oficial (con mayúsculas correctas)
+            finalName = guest.nombre_completo;
+        } else {
+            // 2. Si no está en la lista, verificamos si es "basura" o un nombre completo
+            const words = inputName.split(/\s+/).filter(w => w.length > 1); // palabras de al menos 2 letras
+
+            if (words.length < 2 || inputName.length < 4) {
+                setNameError("El nombre no está en la lista o es inválido. Por favor, ingresá tu nombre completo.");
+                return;
+            }
+
+            // 3. Si parece un nombre completo pero no está en la lista, lo capitalizamos
+            finalName = formatName(inputName);
+        }
+
         setIsSubmitting(true);
 
         if (!siteConfig.rsvp.sheetUrl) {
@@ -59,9 +95,8 @@ export const RSVP = () => {
         }
 
         try {
-            // Usamos GET con parámetros en la URL (más confiable para Google Apps Script)
             const params = new URLSearchParams({
-                name: formData.name,
+                name: finalName,
                 attendance: formData.attendance,
                 restrictions: formData.restrictions
             });
@@ -74,8 +109,7 @@ export const RSVP = () => {
             });
 
             setIsSuccess(true);
-            // Agregamos el nombre localmente para feedback inmediato
-            setConfirmedGuests(prev => [...prev, formData.name]);
+            setConfirmedGuests(prev => [...prev, finalName]);
             setFormData({ name: "", attendance: "si", restrictions: "Sin restriccion" });
         } catch (error) {
             alert("Hubo un error al enviar tu confirmación. Por favor intentá nuevamente.");
@@ -89,6 +123,7 @@ export const RSVP = () => {
         setFormData(prev => ({ ...prev, [name]: value }));
 
         if (name === "name") {
+            setNameError(null);
             if (value.length > 0) {
                 const matches = invitadosData.filter(invitado =>
                     invitado.nombre_completo.toLowerCase().includes(value.toLowerCase())
@@ -106,6 +141,7 @@ export const RSVP = () => {
         setFormData(prev => ({ ...prev, name: nombre }));
         setSuggestions([]);
         setShowSuggestions(false);
+        setNameError(null);
     };
 
     return (
@@ -134,9 +170,12 @@ export const RSVP = () => {
                                 if (formData.name) handleChange({ target: { name: 'name', value: formData.name } } as any);
                             }}
                             autoComplete="off"
-                            className="w-full px-4 py-3 rounded-lg border border-stone-200 focus:ring-2 focus:ring-wedding-sage focus:border-transparent outline-none transition-all bg-stone-50"
+                            className={`w-full px-4 py-3 rounded-lg border ${nameError ? 'border-red-300 ring-1 ring-red-100' : 'border-stone-200'} focus:ring-2 focus:ring-wedding-sage focus:border-transparent outline-none transition-all bg-stone-50`}
                             placeholder="Busca tu nombre..."
                         />
+                        {nameError && (
+                            <p className="text-red-500 text-xs mt-1 ml-1 font-medium">{nameError}</p>
+                        )}
                         {showSuggestions && suggestions.length > 0 && (
                             <ul className="absolute z-20 w-full bg-white mt-1 border border-stone-100 rounded-lg shadow-xl max-h-60 overflow-y-auto overflow-x-hidden">
                                 {suggestions.map((invitado) => {
